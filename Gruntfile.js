@@ -1,30 +1,15 @@
 module.exports = function(grunt) {
 
   grunt.initConfig({
-    concurrent: {
-      tests: {
-        tasks: ['nodemon:tests', 'watch:tests'],
-        options: {
-          logConcurrentOutput: true
-        }
-      }
-    },
-    nodemon: {
-      tests: {
-        script: 'index.js',
-        options: {
-          ext: 'js',
-          watch: ['**/*.js', '**/*.json'],
-          nodeArgs: ['--debug'],
-          callback: function(nodemon) {
-            nodemon.on('log', function(event) {
-              console.log(event.colour);
-            });
-            nodemon.on('restart', function() {
-              require('fs').writeFileSync('.rebooted', 'rebooted');
-            });
-          }
-        }
+    node_version: {
+      /////// ensure you are using the node version required by your project's package.json
+      options: {
+        alwaysInstall: false,
+        errorLevel: 'fatal',
+        globals: [],
+        maxBuffer: 200*1024,
+        nvm: false,           //// try to `nvm use` first
+        override: ''          ///// use version from package.json
       }
     },
     watch: {
@@ -47,12 +32,12 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-node-version');
+  
   grunt.loadNpmTasks('grunt-mocha-cli');
-  grunt.loadNpmTasks('grunt-nodemon');
-  grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('test', ['mochacli:local']);
-  grunt.registerTask('livetests', ['watch:tests']);
+  grunt.registerTask('test', ['node_version', 'mochacli:local']);
+  grunt.registerTask('livetests', ['node_version', 'watch:tests']);
 
 };

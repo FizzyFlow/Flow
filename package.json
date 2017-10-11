@@ -21,10 +21,9 @@
     "ws": "^3.2.0"
   },
   "devDependencies": {
-    "grunt-concurrent": "^2.3.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-mocha-cli": "^3.0.0",
-    "grunt-nodemon": "^0.4.2",
+    "grunt-node-version": "^1.0.2",
     "unexpected": "^10.35.0"
   }
 }

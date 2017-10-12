@@ -59,7 +59,7 @@ describe('Flow network 2 peers handshake', function() {
 		var peerChannels = network1.getPeerChannels();
 		expect(peerChannels.length, 'to be', 1);
 
-		peerChannels.values().forEach(function(peerChannel){
+		peerChannels.forEach(function(peerChannel){
 			peerChannel1 = peerChannel;
 		});
 
@@ -69,7 +69,7 @@ describe('Flow network 2 peers handshake', function() {
 		var peerChannels = network2.getPeerChannels();
 		expect(peerChannels.length, 'to be', 1);
 
-		peerChannels.values().forEach(function(peerChannel){
+		peerChannels.forEach(function(peerChannel){
 			peerChannel2 = peerChannel;
 		});
 

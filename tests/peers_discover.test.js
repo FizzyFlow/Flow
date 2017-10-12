@@ -16,7 +16,7 @@ beforeEach(async function() {
     var network3 = await flow3.getNetwork();
 });
 
-describe('Flow network 2 peers handshake', function() {
+describe('Flow network peers discover', function() {
 
     var flow1 = null;
     var network1 = null;
@@ -66,5 +66,25 @@ describe('Flow network 2 peers handshake', function() {
 
     //// on this poing, network1 knows about #2 and #3, while #2 knows only about #1, #3 knows only about #1
 
+    it('Lets network3 ask network1 for more peers', function(done) {
+        var promises = [];
+
+        var peerChannel3 = null;
+        var peerChannels = network3.getPeerChannels();
+        expect(peerChannels.length, 'to be', 1);
+
+        peerChannels.forEach(function(peerChannel){
+            peerChannel3 = peerChannel;
+        });
+
+        // promises.push(  new Promise((resolve, reject) => 
+        //     network3.on('handshake:success',() => resolve()) )  );
+        promises.push(  new Promise((resolve, reject) =>   
+            network1.on('askedforpeers',() => resolve()) )  );
+
+        peerChannel3.askForMorePeers();
+
+        Promise.all(promises).then( () => done() );
+    });
 
 });

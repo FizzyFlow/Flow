@@ -43,20 +43,16 @@ describe('HashMap class', function() {
 		expect(hashMap.contains(date), 'to be', true);
 		expect(hashMap.get(date), 'to be', 'valuuue');
 
-		hashMap.put([1,2,3], 'valuuue');
-		expect(hashMap.length, 'to be', 2);
-		expect(hashMap.contains([1,2,3]), 'to be', true);
-		expect(hashMap.get([1,2,3]), 'to be', 'valuuue');
 
 		var obj = {something: 'awesome'};
 
 		hashMap.put(obj, 'valuuue');
-		expect(hashMap.length, 'to be', 3);
+		expect(hashMap.length, 'to be', 2);
 		expect(hashMap.contains(obj), 'to be', true);
 		expect(hashMap.get(obj), 'to be', 'valuuue');
 
 		hashMap.put(obj, 'valuuue');  //// same object instance
-		expect(hashMap.length, 'to be', 3);
+		expect(hashMap.length, 'to be', 2);
 		expect(hashMap.contains(obj), 'to be', true);
 		expect(hashMap.get(obj), 'to be', 'valuuue');
 

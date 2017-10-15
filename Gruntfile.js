@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports = function(grunt) {
 
   grunt.initConfig({
@@ -23,7 +25,7 @@ module.exports = function(grunt) {
         require: ['assert'],
         reporter: 'spec',
         bail: true,
-        timeout: 6000,
+        timeout: 60000,
         files: ['tests/*.js']
       },
       local: {
@@ -32,12 +34,38 @@ module.exports = function(grunt) {
     }
   });
 
+  /**
+   * Custom task to dynamically configure the `mochacli.options.files` Array.
+   * All filepaths that match the given globbing pattern(s), which is specified
+   # via the `grunt.file.expand` method, will be sorted chronologically via each
+   * file(s) latest modified date (i.e. mtime).
+   */
+  grunt.registerTask('runMochaTests', function configMochaTask() {
+    var sortedPaths = grunt.file.expand({ filter: 'isFile' }, 'tests/**/*.js')
+      .map(function(filePath) {
+        return {
+          fpath: filePath,
+          modtime: fs.statSync(filePath).mtime.getTime()
+        }
+      })
+      .sort(function (a, b) {
+        return a.modtime - b.modtime;
+      })
+      .map(function (info) {
+        return info.fpath;
+      })
+      .reverse();
+
+    grunt.config('mochacli.options.files', sortedPaths);
+    grunt.task.run(['mochacli:local']);
+  });
+
   grunt.loadNpmTasks('grunt-node-version');
   
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('test', ['node_version', 'mochacli:local']);
+  grunt.registerTask('test', ['node_version', 'runMochaTests']);
   grunt.registerTask('livetests', ['node_version', 'watch:tests']);
 
 };

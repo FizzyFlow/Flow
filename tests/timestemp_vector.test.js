@@ -12,6 +12,8 @@ describe('TimestampVector', function() {
     it('is ready to be initialized', async function() {
         let vector = BinaryVector.factory('TimestampVector');
 
+
+
         expect(vector, 'to be a', 'object');
 
         let currentTimestamp = Date.now();

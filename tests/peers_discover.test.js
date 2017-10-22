@@ -134,6 +134,9 @@ describe('Flow network peers discover', function() {
             networks[0].on('handshake:success', ()=>{
                 connectedCount++;
                 if (connectedCount == Settings.network.limits.peers) {
+                    expect(networks[0].knownPeerAddresses.activeCount, 'to be', Settings.network.limits.peers);
+                    expect(networks[0].knownPeerAddresses.activeInboundCount, 'to be', Settings.network.limits.peers);
+                    expect(networks[0].knownPeerAddresses.activeOutboundCount, 'to be', 0);
                     res();
                 }
             });
@@ -146,6 +149,9 @@ describe('Flow network peers discover', function() {
                 expect(peerChannel, 'to be', null);
                 discardedCount++;
                 if (discardedCount == 1) {
+                    // networks[0].knownPeerAddresses.activeCount + networks[0]._awaitingForHandshakeCount
+                    expect(networks[0].connectionsCount, 'to be', Settings.network.limits.peers);
+                    expect(networks[0].knownPeerAddresses.activeOutboundCount, 'to be', 0);
                     res();
                 }
             });

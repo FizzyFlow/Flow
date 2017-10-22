@@ -6,7 +6,9 @@ module.exports = {
         maxPort: 8200
     },
     limits: {
-        peers: 25
+        peers: 25,
+        inboundPeers: 17,
+        outboundPeers: 19 /// it's nice to set this values to prime numbers
     },
     timeouts: {
         ping: 5000

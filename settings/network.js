@@ -13,6 +13,10 @@ module.exports = {
     timeouts: {
         ping: 5000
     },
+    testing: {
+        enableNetworkGraphBroadcast: true, /// see NetworkGraphExport class
+        networkGraphBroadcastPort: 5588
+    },
     discovery: {
         connectMoreInterval: 2000,
         askMoreInterval: 5000

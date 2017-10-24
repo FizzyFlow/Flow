@@ -6,6 +6,9 @@ const Flow = rfr('lib/Flow.js');
 const PeerChannel = rfr('lib/network/PeerChannel.js');
 const Settings = rfr('lib/utils/Settings.js');
 
+
+const NetworkGraphExport = rfr('lib/network/helpers/NetworkGraphExport.js');
+
 beforeEach(async function() {
     var flow1 = new Flow();
     var network1 = await flow1.getNetwork();
@@ -118,13 +121,18 @@ describe('Flow network peers discover', function() {
             let flow = new Flow();
             let network = await flow.getNetwork();
             networks.push(network);
+
+            network.on('handshake:success', ()=>{ exporter.setTimeframe(); });
         }
+
+        let exporter = new NetworkGraphExport({networks: networks}); 
 
         expect(networks.length, 'to be', Settings.network.limits.peers + 2);
 
         var peerAddress = networks[0].getLocalPeerAddress();
         //// connect all peers to 1st one
         for (let i = 1; i <= Settings.network.limits.peers+1; i++) {
+            exporter.setTimeframe();
             networks[i].connect(peerAddress.ip, peerAddress.port);
         }
 
@@ -146,6 +154,7 @@ describe('Flow network peers discover', function() {
         var waitForDiscardPromise = new Promise((res, rej) => {
             var discardedCount = 0;
             networks[0].on('closed', (peerChannel, peerAddress)=>{
+                exporter.setTimeframe();
                 expect(peerChannel, 'to be', null);
                 discardedCount++;
                 if (discardedCount == 1) {
@@ -158,6 +167,9 @@ describe('Flow network peers discover', function() {
         });
 
         await Promise.all([waitForDiscardPromise, waitForConnectionsPromise]);
+
+        await new Promise((res,rej)=>{ setTimeout(res, 20000); });
+        exporter.save('tmp/handshake_limits.json');
     });
 
 });

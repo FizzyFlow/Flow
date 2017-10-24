@@ -24,3 +24,11 @@ Watch files and run unit tests on updates
 ```bash
 grunt livetests
 ```
+
+Use network visualisation tool:
+
+* [Install Fizzy Network Visualisation Tool](https://github.com/FizzyFlow/FizzyNetworkVisualisation)
+* Enable network visualisation broadcast in FizzyFlow (settings/network.js -> testing -> enableNetworkGraphBroadcast)
+* Open Fizzy Network Visualisation Tool, listen to broadcast
+* Run unit tests
+* Check out network visualisation in Fizzy Network Visualisation Tool

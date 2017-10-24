@@ -26,6 +26,7 @@ grunt livetests
 ```
 
 Use network visualisation tool:
+----
 
 * [Install Fizzy Network Visualisation Tool](https://github.com/FizzyFlow/FizzyNetworkVisualisation)
 * Enable network visualisation broadcast in FizzyFlow (settings/network.js -> testing -> enableNetworkGraphBroadcast)

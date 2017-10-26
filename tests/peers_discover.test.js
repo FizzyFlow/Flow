@@ -122,7 +122,7 @@ describe('Flow network peers discover', function() {
             let network = await flow.getNetwork();
             networks.push(network);
 
-            network.on('handshake:success', ()=>{ exporter.setTimeframe(); });
+            network.on('peer:status', ()=>{ exporter.setTimeframe(); });
         }
 
         let exporter = new NetworkGraphExport({networks: networks}); 

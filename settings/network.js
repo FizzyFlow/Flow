@@ -19,7 +19,7 @@ module.exports = {
     },
     discovery: {
         connectMoreInterval: 2000,
-        askMoreInterval: 5000
+        askMoreInterval: 15000
     },
     version: {
         version: '0.001'

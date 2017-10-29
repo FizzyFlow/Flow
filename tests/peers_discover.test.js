@@ -114,24 +114,30 @@ describe('Flow network peers discover', function() {
     });
 
 
-    it('Check for max connected peers limit', async function() {
+    it.only('Check for max connected peers limit', async function() {
         Settings.network.limits.peers = 5;
+        let expectedNodesCount = Settings.network.limits.peers + 3;
+
         let networks = [];
-        for (let i = 0; i <= Settings.network.limits.peers+1; i++) { /// create maxPeers + 2 peers
+        for (let i = 0; i <= Settings.network.limits.peers+2; i++) { /// create maxPeers + 2 peers
             let flow = new Flow();
             let network = await flow.getNetwork();
             networks.push(network);
 
             network.on('peer:status', ()=>{ exporter.setTimeframe(); });
+
+            network.on('message', (msg, peerChannel)=>{ 
+                exporter.addMessage(peerChannel._peerConnection.peerAddress, peerChannel._localPeerAddress, msg); 
+            });
         }
 
         let exporter = new NetworkGraphExport({networks: networks}); 
 
-        expect(networks.length, 'to be', Settings.network.limits.peers + 2);
+        expect(networks.length, 'to be', expectedNodesCount);
 
         var peerAddress = networks[0].getLocalPeerAddress();
         //// connect all peers to 1st one
-        for (let i = 1; i <= Settings.network.limits.peers+1; i++) {
+        for (let i = 1; i <= Settings.network.limits.peers+2; i++) {
             exporter.setTimeframe();
             networks[i].connect(peerAddress.ip, peerAddress.port);
         }
@@ -168,7 +174,7 @@ describe('Flow network peers discover', function() {
 
         await Promise.all([waitForDiscardPromise, waitForConnectionsPromise]);
 
-        await new Promise((res,rej)=>{ setTimeout(res, 20000); });
+        await new Promise((res,rej)=>{ setTimeout(res, 30000); });
         exporter.save('tmp/handshake_limits.json');
     });
 

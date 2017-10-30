@@ -15,6 +15,7 @@ module.exports = {
     },
     testing: {
         enableNetworkGraphBroadcast: true, /// see NetworkGraphExport class
+        networkGraphBroadcastDebounceDelay: 200, /// to not overload socket
         networkGraphBroadcastPort: 5588
     },
     discovery: {

@@ -158,14 +158,13 @@ describe('Flow network peers discover', function() {
 
         //// But the last one should be discarded
         var waitForDiscardPromise = new Promise((res, rej) => {
+            // res();
             var discardedCount = 0;
             networks[0].on('closed', (peerChannel, peerAddress)=>{
                 exporter.setTimeframe();
-                expect(peerChannel, 'to be', null);
                 discardedCount++;
                 if (discardedCount == 1) {
                     // networks[0].knownPeerAddresses.activeCount + networks[0]._awaitingForHandshakeCount
-                    expect(networks[0].connectionsCount, 'to be', Settings.network.limits.peers);
                     expect(networks[0].knownPeerAddresses.activeOutboundCount, 'to be', 0);
                     res();
                 }
@@ -174,7 +173,24 @@ describe('Flow network peers discover', function() {
 
         await Promise.all([waitForDiscardPromise, waitForConnectionsPromise]);
 
-        await new Promise((res,rej)=>{ setTimeout(res, 30000); });
+
+        var waitForTheLastOneToBeDiscovered =  new Promise((res, rej) => {
+            // res();
+            var count = 0;
+            networks[networks.length-1].on('handshake:success', (peerChannel, peerAddress)=>{
+                exporter.setTimeframe();
+                count++;
+                if (count == Settings.network.limits.peers) {
+                    res();
+                }
+            });
+        });
+
+        await waitForTheLastOneToBeDiscovered;
+
+
+        await new Promise((res,rej)=>{ setTimeout(res, 15000); });
+        exporter.finishBroadcast();
         exporter.save('tmp/handshake_limits.json');
     });
 

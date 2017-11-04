@@ -82,7 +82,6 @@ describe('Flow network peers discover', function() {
         });
 
         expect(network1.knownPeerAddresses.knownCount, 'to be', 2);
-        expect(network3.knownPeerAddresses.knownCount, 'to be', 1);
 
         promises.push(  new Promise((resolve, reject) =>   
             network1.on('askedforpeers',() => resolve()) )  );
@@ -191,7 +190,7 @@ describe('Flow network peers discover', function() {
 
         await new Promise((res,rej)=>{ setTimeout(res, 15000); });
         exporter.finishBroadcast();
-        exporter.save('tmp/handshake_limits.json');
+        // exporter.save('tmp/handshake_limits.json');
     });
 
 });

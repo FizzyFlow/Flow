@@ -1,8 +1,8 @@
 {
   "name": "fizzyflow-flow",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
-    "node": ">=8.1.3"
+    "node": ">=8.9.0"
   },
   "description": "",
   "main": "index.js",
@@ -10,7 +10,11 @@
     "test": "grunt test"
   },
   "author": "Jeka Kiselyov <jeka911@gmail.com> (https://github.com/jeka-kiselyov)",
-  "license": "GNU Affero General Public License v3.0",
+  "license": "AGPL-3.0+",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FizzyFlow/Flow.git"
+  },
   "dependencies": {
     "bignum": "^0.12.5",
     "grunt": "^1.0.1",

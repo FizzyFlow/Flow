@@ -114,7 +114,7 @@ describe('Flow network peers discover', function() {
     });
 
 
-    it.only('Check for max connected peers limit', async function() {
+    it('Check for max connected peers limit', async function() {
         Settings.network.limits.peers = 3;
         let expectedNodesCount = Settings.network.limits.peers + 3;
 

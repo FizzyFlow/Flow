@@ -11,7 +11,8 @@ module.exports = {
         outboundPeers: 19 /// it's nice to set this values to prime numbers
     },
     timeouts: {
-        ping: 5000
+        ping: 5000,
+        waitingForActivity: 15000 /// disconnect from peers that are not active in this interval
     },
     testing: {
         enableNetworkGraphBroadcast: true, /// see NetworkGraphExport class

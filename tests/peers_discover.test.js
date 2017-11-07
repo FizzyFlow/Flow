@@ -123,21 +123,21 @@ describe('Flow network peers discover', function() {
             let network = await flow.getNetwork();
             networks.push(network);
 
-            network.on('peer:status', ()=>{ exporter.setTimeframe(); });
+            // network.on('peer:status', ()=>{ exporter.setTimeframe(); });
 
             network.on('message', (msg, peerChannel)=>{ 
-                exporter.addMessage(peerChannel._peerConnection.peerAddress, peerChannel._localPeerAddress, msg); 
+                // exporter.addMessage(peerChannel._peerConnection.peerAddress, peerChannel._localPeerAddress, msg); 
             });
         }
 
-        let exporter = new NetworkGraphExport({networks: networks}); 
+        // let exporter = new NetworkGraphExport({networks: networks}); 
 
         expect(networks.length, 'to be', expectedNodesCount);
 
         var peerAddress = networks[0].getLocalPeerAddress();
         //// connect all peers to 1st one
         for (let i = 1; i <= Settings.network.limits.peers+2; i++) {
-            exporter.setTimeframe();
+            // exporter.setTimeframe();
             networks[i].connect(peerAddress.ip, peerAddress.port);
         }
 
@@ -160,7 +160,7 @@ describe('Flow network peers discover', function() {
             // res();
             var discardedCount = 0;
             networks[0].on('closed', (peerChannel, peerAddress)=>{
-                exporter.setTimeframe();
+                // exporter.setTimeframe();
                 discardedCount++;
                 if (discardedCount == 1) {
                     // networks[0].knownPeerAddresses.activeCount + networks[0]._awaitingForHandshakeCount
@@ -177,7 +177,7 @@ describe('Flow network peers discover', function() {
             // res();
             var count = 0;
             networks[networks.length-1].on('handshake:success', (peerChannel, peerAddress)=>{
-                exporter.setTimeframe();
+                // exporter.setTimeframe();
                 count++;
                 if (count == Settings.network.limits.peers) {
                     res();
@@ -189,7 +189,7 @@ describe('Flow network peers discover', function() {
 
 
         await new Promise((res,rej)=>{ setTimeout(res, 15000); });
-        exporter.finishBroadcast();
+        // exporter.finishBroadcast();
         // exporter.save('tmp/handshake_limits.json');
     });
 

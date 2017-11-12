@@ -2,7 +2,6 @@ const expect = require('unexpected');
 const rfr = require('rfr');
 const Flow = rfr('lib/Flow.js');
 
-
 const PeerChannel = rfr('lib/network/PeerChannel.js');
 
 beforeEach(async function() {
@@ -47,7 +46,7 @@ describe('Flow network 2 peers handshake', function() {
 
 		var peerAddress = network1.getLocalPeerAddress();
 
-		network2.connect(peerAddress.ip, peerAddress.port);
+		network2._connect(peerAddress);
 
 		Promise.all(promises).then( () => done() );
 	});

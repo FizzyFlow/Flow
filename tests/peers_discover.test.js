@@ -10,14 +10,6 @@ const Settings = rfr('lib/utils/Settings.js');
 const NetworkGraphExport = rfr('lib/network/helpers/NetworkGraphExport.js');
 
 beforeEach(async function() {
-    var flow1 = new Flow();
-    var network1 = await flow1.getNetwork();
-
-    var flow2 = new Flow();
-    var network2 = await flow2.getNetwork();
-
-    var flow3 = new Flow();
-    var network3 = await flow3.getNetwork();
 });
 
 describe('Flow network peers discover', function() {
@@ -49,7 +41,7 @@ describe('Flow network peers discover', function() {
             network1.on('handshake:success',() => resolve()) )  );
 
         var peerAddress = network1.getLocalPeerAddress();
-        network2.connect(peerAddress.ip, peerAddress.port);
+        network2._connect(peerAddress);
 
         Promise.all(promises).then( () => done() );
     });
@@ -63,7 +55,7 @@ describe('Flow network peers discover', function() {
             network1.on('handshake:success',() => resolve()) )  );
 
         var peerAddress = network1.getLocalPeerAddress();
-        network3.connect(peerAddress.ip, peerAddress.port);
+        network3._connect(peerAddress);
 
         Promise.all(promises).then( () => done() );
     });
@@ -138,7 +130,7 @@ describe('Flow network peers discover', function() {
         //// connect all peers to 1st one
         for (let i = 1; i <= Settings.network.limits.peers+2; i++) {
             // exporter.setTimeframe();
-            networks[i].connect(peerAddress.ip, peerAddress.port);
+            networks[i]._connect(peerAddress);
         }
 
         //// Settings.network.limits.peers should be connected to network[0]

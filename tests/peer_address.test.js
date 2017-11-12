@@ -12,7 +12,7 @@ describe('PeerAddress class', function() {
 	it('is ready to be initialized', async function() {
 		expect(PeerAddress, 'to be a', 'function');
 
-		var peerAddress = new PeerAddress({
+		let peerAddress = new PeerAddress({
 			ip: '255.11.241.4',
 			port: 9020
 		});
@@ -20,10 +20,10 @@ describe('PeerAddress class', function() {
 		expect(peerAddress, 'to be a', 'object');
 		expect(peerAddress instanceof PeerAddress, 'to be true');
 
-		var asBinary = peerAddress.toBinary();
+		let asBinary = peerAddress.toBinary();
 		expect(asBinary, 'to be a', 'Buffer');
 
-		var restoredPeerAddress = PeerAddress.fromBinary(asBinary);
+		let restoredPeerAddress = PeerAddress.fromBinary(asBinary);
 		expect(peerAddress, 'to be a', 'object');
 		expect(restoredPeerAddress instanceof PeerAddress, 'to be true');
 
@@ -45,11 +45,11 @@ describe('PeerAddress class', function() {
 		expect(restoredPeerAddress.equals(peerAddress), 'to be true');   //// same again
 		expect(restoredPeerAddress.ipEquals(peerAddress), 'to be true');
 
-		var peerAddress1 = new PeerAddress({
+		let peerAddress1 = new PeerAddress({
 			ip: '127.0.0.1',
 			port: 8080
 		});
-		var peerAddress2 = new PeerAddress({
+		let peerAddress2 = new PeerAddress({
 			ip: '::ffff:7f00:1',
 			port: 8080
 		});
@@ -57,22 +57,64 @@ describe('PeerAddress class', function() {
 		expect(peerAddress1.equals(peerAddress2), 'to be true');   //// v6-v4 compare
 		expect(peerAddress1.ipEquals(peerAddress2), 'to be true');
 
-		var peerAddress2 = new PeerAddress({
+		let peerAddress3 = new PeerAddress({
 			ip: '::ffff:127.0.0.1',
 			port: 8080
 		});
 
-		expect(peerAddress1.equals(peerAddress2), 'to be true');   //// v6-v4 compare
-		expect(peerAddress1.ipEquals(peerAddress2), 'to be true');
+		expect(peerAddress1.equals(peerAddress3), 'to be true');   //// v6-v4 compare
+		expect(peerAddress1.ipEquals(peerAddress3), 'to be true');
 
-		var peerAddress1 = new PeerAddress({
+		let peerAddress4 = new PeerAddress({
 			ip: '127.0.0.2',
 			port: 8080
 		});
 
-		expect(peerAddress1.equals(peerAddress2), 'to be false');
-		expect(peerAddress1.ipEquals(peerAddress2), 'to be false');
+		expect(peerAddress4.equals(peerAddress3), 'to be false');
+		expect(peerAddress4.ipEquals(peerAddress3), 'to be false');
 
+		expect(peerAddress4.isSSL(), 'to be false');
+
+		let sslPeerAddress = new PeerAddress({
+			ssl: true,
+			port: 31337,
+			host: 'fizzy.example.com'
+		});
+
+		expect(sslPeerAddress.isSSL(), 'to be true');
+
+		expect(sslPeerAddress, 'to be a', 'object');
+		expect(sslPeerAddress instanceof PeerAddress, 'to be true');
+
+		let sslAsBinary = sslPeerAddress.toBinary();
+		expect(sslAsBinary, 'to be a', 'Buffer');
+
+		let sslRestored = PeerAddress.fromBinary(sslAsBinary);
+		expect(sslRestored, 'to be a', 'object');
+		expect(sslRestored instanceof PeerAddress, 'to be true');
+
+		expect(sslRestored.host === sslPeerAddress.host, 'to be true');
+		expect(sslRestored.port === sslPeerAddress.port, 'to be true');
+
+		expect(sslRestored.equals(sslPeerAddress), 'to be true');
 	});
 
+	it('host has priority over ip', async function() {
+		expect(PeerAddress, 'to be a', 'function');
+
+		let sslPeerAddress1 = new PeerAddress({
+			ssl: true,
+			port: 31337,
+			ip: '127.0.0.3',
+			host: 'fizzy.example.com'
+		});
+
+		let sslPeerAddress2 = new PeerAddress({
+			ssl: true,
+			port: 31337,
+			host: 'fizzy.example.com'
+		});
+
+		expect(sslPeerAddress2.equals(sslPeerAddress1), 'to be true');
+	});
 });

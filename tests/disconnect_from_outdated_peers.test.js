@@ -7,7 +7,7 @@ const Settings = rfr('lib/utils/Settings.js');
 
 const NetworkGraphExport = rfr('lib/network/helpers/NetworkGraphExport.js');
 
-describe('Flow network peers discover', function() {
+describe('Flow network disconnect from outdated', function() {
 
     var flow1 = null;
     var network1 = null;
@@ -31,8 +31,8 @@ describe('Flow network peers discover', function() {
         Settings.network.limits.peers = 5;
 
         var peerAddress = network1.getLocalPeerAddress();
-        network2.connect(peerAddress.ip, peerAddress.port);
-        network3.connect(peerAddress.ip, peerAddress.port);
+        network2._connect(peerAddress);
+        network3._connect(peerAddress);
 
         /// wait till network3 connects network2 by peers discover procceess
         await new Promise((res, rej) => {
